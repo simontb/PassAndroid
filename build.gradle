@@ -49,16 +49,15 @@ android {
         }
     }
 
-
     // needed for assertJ
     packagingOptions {
-      exclude 'asm-license.txt'
-      exclude 'LICENSE'
-      exclude 'NOTICE'
+        exclude 'asm-license.txt'
+        exclude 'LICENSE'
+        exclude 'NOTICE'
     }
 
     // https://groups.google.com/forum/#!topic/adt-dev/-Km7VgExKf4
-//    useOldManifestMerger true
+ //    useOldManifestMerger true
 }
 
 dependencies {
@@ -97,7 +96,12 @@ dependencies {
     compile 'com.google.guava:guava:18.0'
     compile 'com.squareup.okhttp:okhttp:2.1.0'
     compile 'fr.nicolaspomepuy:discreetapprate:2.0.3@aar'
+    compile 'com.larswerkman:HoloColorPicker:1.4'
 
+    //compile 'fr.baloomba:viewpagerindicator:2.4.2'
+    compile('com.mcxiaoke.viewpagerindicator:library:2.4.1') {
+        exclude group: 'com.android.support'
+    }
     // cannot use this new version: https://github.com/zxing/zxing/issues/165
     // WARNING: might work on some devices or the emulator - but fails on others
     // compile 'com.google.zxing:core:3.1.0'
