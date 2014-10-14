@@ -44,8 +44,7 @@ public class BarcodeEditFragment extends Fragment implements CompoundButton.OnCh
 
         if (qrCheck.isChecked()) {
             barCodeIntentIntegrator.initiateScan(BarCodeIntentIntegrator.QR_CODE_TYPES);
-        }
-        if (aztecCheck.isChecked()) {
+        } else if (aztecCheck.isChecked()) {
             barCodeIntentIntegrator.initiateScan(Collections.singleton("AZTEC"));
         } else if (pdfCheck.isChecked()) {
             barCodeIntentIntegrator.initiateScan(Collections.singleton("PDF417"));
@@ -181,9 +180,9 @@ public class BarcodeEditFragment extends Fragment implements CompoundButton.OnCh
         newBarCode.setAlternativeText(alternativeMessageInput.getText().toString());
         pass.setBarCode(newBarCode);
 
-        new AsyncSetBarCodeImageTask(selectorQR).execute(new BarCode(BarcodeFormat.QR_CODE,message ));
-        new AsyncSetBarCodeImageTask(selectorPDF417).execute(new BarCode(BarcodeFormat.PDF_417,message ));
-        new AsyncSetBarCodeImageTask(selectorAztec).execute(new BarCode(BarcodeFormat.AZTEC,message ));
+        new AsyncSetBarCodeImageTask(selectorQR).execute(new BarCode(BarcodeFormat.QR_CODE, message));
+        new AsyncSetBarCodeImageTask(selectorPDF417).execute(new BarCode(BarcodeFormat.PDF_417, message));
+        new AsyncSetBarCodeImageTask(selectorAztec).execute(new BarCode(BarcodeFormat.AZTEC, message));
     }
 
     private class AsyncSetBarCodeImageTask extends AsyncTask<BarCode, Void, Bitmap> {
