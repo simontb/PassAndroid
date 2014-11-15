@@ -23,7 +23,7 @@ import org.ligi.passandroid.model.PassImpl;
 import org.ligi.passandroid.model.PassWriter;
 import org.ligi.passandroid.ui.edit_fragments.BarcodeEditFragment;
 import org.ligi.passandroid.ui.edit_fragments.CategoryPickFragment;
-import org.ligi.passandroid.ui.edit_fragments.ColorPockFragment;
+import org.ligi.passandroid.ui.edit_fragments.ColorPickFragment;
 import org.ligi.passandroid.ui.edit_fragments.ImageEditFragment;
 import org.ligi.passandroid.ui.edit_fragments.MetaDataFragment;
 
@@ -99,7 +99,7 @@ public class PassEditActivity extends ActionBarActivity {
                 case 2:
                     return new ImageEditFragment();
                 case 3:
-                    return new ColorPockFragment();
+                    return new ColorPickFragment();
 
                 case 4:
                 default:

@@ -17,14 +17,14 @@ import org.ligi.passandroid.model.PassImpl;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ColorPockFragment extends Fragment {
+public class ColorPickFragment extends Fragment {
 
     @InjectView(R.id.colorPicker)
     ColorPicker colorPicker;
 
     private final PassImpl pass;
 
-    public ColorPockFragment() {
+    public ColorPickFragment() {
         pass = (PassImpl) App.getPassStore().getCurrentPass().get();
     }
 
