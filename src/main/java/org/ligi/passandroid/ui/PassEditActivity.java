@@ -55,6 +55,8 @@ public class PassEditActivity extends ActionBarActivity {
             finish();
         }
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         setupViewPager();
     }
 
@@ -143,18 +145,23 @@ public class PassEditActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_save) {
-            final String jsonString = PassWriter.toJSON(pass);
 
-            final String path = App.getPassStore().getPathForID(pass.getId());
-            new File(path).mkdirs();
-            final File file = new File(path, "data.json");
-            App.getPassStore().deleteCache(pass.getId());
-            AXT.at(file).writeString(jsonString);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.menu_save:
+                final String jsonString = PassWriter.toJSON(pass);
 
-            App.getPassStore().setCurrentPass(pass);
-            AXT.at(this).startCommonIntent().activityFromClass(PassViewActivity.class);
-            return true;
+                final String path = App.getPassStore().getPathForID(pass.getId());
+                new File(path).mkdirs();
+                final File file = new File(path, "data.json");
+                App.getPassStore().deleteCache(pass.getId());
+                AXT.at(file).writeString(jsonString);
+
+                App.getPassStore().setCurrentPass(pass);
+                AXT.at(this).startCommonIntent().activityFromClass(PassViewActivity.class);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
