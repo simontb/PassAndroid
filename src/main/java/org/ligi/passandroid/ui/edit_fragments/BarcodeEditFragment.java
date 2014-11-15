@@ -54,7 +54,7 @@ public class BarcodeEditFragment extends Fragment implements CompoundButton.OnCh
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (data.hasExtra("SCAN_RESULT")) {
+        if (data!=null && data.hasExtra("SCAN_RESULT")) {
             messageInput.setText(data.getStringExtra("SCAN_RESULT"));
         }
 
