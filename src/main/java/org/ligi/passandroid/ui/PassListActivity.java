@@ -12,27 +12,18 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.service.MarketService;
 import com.google.common.base.Optional;
 import com.squareup.otto.Subscribe;
 
-import org.ligi.axt.AXT;
 import org.ligi.passandroid.App;
 import org.ligi.passandroid.R;
 import org.ligi.passandroid.Tracker;
@@ -41,7 +32,6 @@ import org.ligi.passandroid.events.NavigationOpenedEvent;
 import org.ligi.passandroid.events.SortOrderChangeEvent;
 import org.ligi.passandroid.events.TypeFocusEvent;
 import org.ligi.passandroid.model.InputStreamWithSource;
-import org.ligi.passandroid.model.Pass;
 import org.ligi.passandroid.model.PassStore;
 import org.ligi.passandroid.model.PastLocationsStore;
 import org.ligi.tracedroid.TraceDroid;
@@ -52,7 +42,6 @@ import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnItemClick;
 import fr.nicolaspomepuy.discreetapprate.AppRate;
 import fr.nicolaspomepuy.discreetapprate.RetryPolicy;
 
@@ -72,9 +61,6 @@ public class PassListActivity extends ActionBarActivity {
 
     @InjectView(R.id.drawer_layout)
     DrawerLayout drawer;
-
-    @InjectView(R.id.emptyView)
-    TextView emptyView;
 
     @InjectView(R.id.list_swiperefresh_layout)
     SwipeRefreshLayout listSwipeRefreshLayout;
@@ -128,15 +114,6 @@ public class PassListActivity extends ActionBarActivity {
         supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.pass_list);
         ButterKnife.inject(this);
-/*
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-        setSupportActionBar(toolbar);
-        */
-        /*
-        getSupportActionBar().setLogo(R.drawable.ic_launcher);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_launcher);
-        getSupportActionBar().setHomeButtonEnabled(true);*/
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -192,7 +169,7 @@ public class PassListActivity extends ActionBarActivity {
     }
 
     private void scanForPasses() {
-        new ScanForPassesTask().execute();
+        new ScanForPassesTask(this).execute();
     }
 
     private void scrollToType(String type) {
@@ -259,19 +236,11 @@ public class PassListActivity extends ActionBarActivity {
             super.onPostExecute(aVoid);
 
             passAdapter = new PassAdapter(PassListActivity.this);
-            passAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                @Override
-                public void onChanged() {
-                    emptyView.setVisibility((passAdapter.getItemCount() == 0)?View.VISIBLE:View.GONE);
-                    listView.setVisibility((passAdapter.getItemCount() != 0)?View.VISIBLE:View.GONE);
-                    super.onChanged();
-                }
-            });
             listView.setAdapter(passAdapter);
 
             if (App.getPassStore().isEmpty()) {
                 uiState.set(PassListUIState.UISTATE_SCAN);
-                scanTask = new ScanForPassesTask();
+                scanTask = new ScanForPassesTask(PassListActivity.this);
                 scanTask.execute();
             } else {
                 uiState.set(PassListUIState.UISTATE_LIST);
@@ -301,10 +270,6 @@ public class PassListActivity extends ActionBarActivity {
         listSwipeRefreshLayout.setRefreshing(uiState.get() != PassListUIState.UISTATE_LIST);
 
         supportInvalidateOptionsMenu();
-
-        emptyView.setText(Html.fromHtml(uiState.getHtmlResForEmptyView()));
-
-        emptyView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 
@@ -333,7 +298,7 @@ public class PassListActivity extends ActionBarActivity {
         super.onPause();
     }
 
-    class ImportAndRefreshListAsync extends ImportAsyncTask {
+    public class ImportAndRefreshListAsync extends ImportAsyncTask {
 
         public ImportAndRefreshListAsync(final Activity passImportActivity, final String path) {
             super(passImportActivity, Uri.parse("file://" + path));
@@ -363,6 +328,12 @@ public class PassListActivity extends ActionBarActivity {
 
     class ScanForPassesTask extends AsyncTask<Void, Optional<String>, Void> {
 
+        private final ActionBarActivity activity;
+
+        ScanForPassesTask(ActionBarActivity activity) {
+            this.activity = activity;
+        }
+
         @Override
         @SafeVarargs
         protected final void onProgressUpdate(Optional<String>... values) {
@@ -371,15 +342,16 @@ public class PassListActivity extends ActionBarActivity {
         }
 
         private void setActionbarToProgress(Optional<String>[] values) {
-            if (getSupportActionBar() == null) {
+            final ActionBar actionBar = activity.getSupportActionBar();
+            if (actionBar == null) {
                 // not here - no work
                 return;
             }
 
             if (values[0].isPresent()) {
-                getSupportActionBar().setSubtitle(String.format(getString(R.string.searching_in), values[0].get()));
+                actionBar.setSubtitle(String.format(activity.getString(R.string.searching_in), values[0].get()));
             } else {
-                getSupportActionBar().setSubtitle(null);
+                actionBar.setSubtitle(null);
             }
 
         }
@@ -407,7 +379,7 @@ public class PassListActivity extends ActionBarActivity {
                 } else if (file.getName().endsWith(".pkpass")) {
                     Log.i("found" + file.getAbsolutePath());
 
-                    new ImportAndRefreshListAsync(PassListActivity.this, file.getAbsolutePath()).execute();
+                    new ImportAndRefreshListAsync(activity, file.getAbsolutePath()).execute();
                 }
             }
 
@@ -439,7 +411,7 @@ public class PassListActivity extends ActionBarActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            for (String path : new PastLocationsStore(PassListActivity.this).getLocations()) {
+            for (String path : new PastLocationsStore(activity).getLocations()) {
                 search_in(new File(path), false);
             }
 
