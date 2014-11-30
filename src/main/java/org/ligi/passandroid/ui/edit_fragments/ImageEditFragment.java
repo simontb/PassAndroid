@@ -88,15 +88,19 @@ public class ImageEditFragment extends Fragment  {
             switch (requestCode) {
                 case REQ_CODE_PICK_LOGO:
                     extractImage(imageReturnedIntent, "logo");
+                    pass.setLogoBitmapFile("logo.png");
                     break;
                 case REQ_CODE_PICK_ICON:
                     extractImage(imageReturnedIntent, "icon");
+                    pass.setIconBitmapFile("icon.png");
                     break;
                 case REQ_CODE_PICK_THUMBNAIL:
                     extractImage(imageReturnedIntent, "thumbnail");
+                    pass.setThumbnailBitmapFile("thumbnail.png");
                     break;
                 case REQ_CODE_PICK_STRIP:
                     extractImage(imageReturnedIntent, "strip");
+                    pass.setStripBitmapFile("strip.png");
                     break;
             }
             refresh();
