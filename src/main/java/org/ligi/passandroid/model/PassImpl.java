@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.Data;
 import org.joda.time.DateTime;
 import org.ligi.axt.AXT;
+import org.ligi.passandroid.BeaconTrigger;
 import org.ligi.tracedroid.logging.Log;
 
 @Data
@@ -45,6 +46,8 @@ public class PassImpl implements FiledPass, Serializable {
     private PassFieldList auxiliaryFields = new PassFieldList();
     private PassFieldList headerFields = new PassFieldList();
     private List<PassLocation> locations = new ArrayList<>();
+    private List<BeaconTrigger> beaconTriggers= new ArrayList<>();
+
     private String path;
     private String id;
 
@@ -63,6 +66,7 @@ public class PassImpl implements FiledPass, Serializable {
 
     @Nullable
     private String passIdent;
+
 
     @Override
     public boolean isValid() {
@@ -104,6 +108,11 @@ public class PassImpl implements FiledPass, Serializable {
     @NonNull
     public String getTypeNotNull() {
         return (type == null) ? "none" : type;
+    }
+
+    @Override
+    public List<BeaconTrigger> getBeaconTriggers() {
+        return beaconTriggers;
     }
 
     @Override

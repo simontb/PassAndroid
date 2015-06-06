@@ -12,6 +12,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.viewpagerindicator.TitlePageIndicator;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.MonitorNotifier;
+import org.altbeacon.beacon.Region;
 import org.ligi.axt.AXT;
 import org.ligi.passandroid.App;
 import org.ligi.passandroid.R;
@@ -23,8 +27,10 @@ import org.ligi.passandroid.ui.edit_fragments.CategoryPickFragment;
 import org.ligi.passandroid.ui.edit_fragments.ColorPickFragment;
 import org.ligi.passandroid.ui.edit_fragments.ImageEditFragment;
 import org.ligi.passandroid.ui.edit_fragments.MetaDataFragment;
+import org.ligi.passandroid.ui.edit_fragments.TriggerEditFragment;
+import org.ligi.tracedroid.logging.Log;
 
-public class PassEditActivity extends AppCompatActivity {
+public class PassEditActivity extends AppCompatActivity  {
 
     @InjectView(R.id.passEditPager)
     ViewPager viewPager;
@@ -76,10 +82,12 @@ public class PassEditActivity extends AppCompatActivity {
                     return "Images";
                 case 3:
                     return "Color";
-
                 case 4:
-                default:
                     return "BarCode";
+
+                case 5:
+                default:
+                    return "Trigger";
             }
         }
 
@@ -94,16 +102,17 @@ public class PassEditActivity extends AppCompatActivity {
                     return new ImageEditFragment();
                 case 3:
                     return new ColorPickFragment();
-
                 case 4:
-                default:
                     return new BarcodeEditFragment();
+                case 5:
+                default:
+                    return new TriggerEditFragment();
             }
         }
 
         @Override
         public int getCount() {
-            return 5;
+            return 6;
         }
     }
 

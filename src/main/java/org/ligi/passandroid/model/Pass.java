@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.io.Serializable;
 import java.util.List;
 import org.joda.time.DateTime;
+import org.ligi.passandroid.BeaconTrigger;
 
 public interface Pass extends Serializable {
 
@@ -30,6 +31,8 @@ public interface Pass extends Serializable {
     PassFieldList getHeaderFields();
 
     List<PassLocation> getLocations();
+
+    List<BeaconTrigger> getBeaconTriggers();
 
     boolean isValid();
 
