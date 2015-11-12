@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.ligi.passandroid.model.AppleStylePassTranslation;
 import org.ligi.passandroid.model.PassField;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ThePassField {
