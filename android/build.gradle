@@ -39,7 +39,7 @@ android {
         versionCode 259
         versionName "2.5.9"
         minSdkVersion 9
-        targetSdkVersion 22
+        targetSdkVersion 23
         applicationId "org.ligi.passandroid"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         archivesBaseName = "PassAndroid-$versionName"
@@ -114,14 +114,14 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1'){
         // http://stackoverflow.com/questions/30578243/why-would-adding-espresso-contrib-cause-an-inflateexception
-        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude module: 'recyclerview-v7'
     }
 
     androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.1') {
         // http://stackoverflow.com/questions/30578243/why-would-adding-espresso-contrib-cause-an-inflateexception
-        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude module: 'recyclerview-v7'
     }
