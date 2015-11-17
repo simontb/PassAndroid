@@ -54,6 +54,7 @@ public class TestModule {
     Settings provideSettings() {
         final Settings mock = mock(Settings.class);
         when(mock.getSortOrder()).thenReturn(PassStore.SortOrder.DATE);
+        when(mock.doTraceDroidEmailSend()).thenReturn(false);
         return mock;
     }
 
