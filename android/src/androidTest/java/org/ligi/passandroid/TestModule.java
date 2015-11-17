@@ -1,12 +1,14 @@
 package org.ligi.passandroid;
 
 import com.google.zxing.BarcodeFormat;
+import com.squareup.otto.Bus;
 
 import org.ligi.passandroid.injections.FixedPassListPassStore;
 import org.ligi.passandroid.model.BarCode;
 import org.ligi.passandroid.model.Pass;
 import org.ligi.passandroid.model.PassImpl;
 import org.ligi.passandroid.model.PassStore;
+import org.ligi.passandroid.model.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+
+import static org.mockito.Mockito.mock;
 
 @Module
 public class TestModule {
@@ -42,5 +46,18 @@ public class TestModule {
             fixedPassListPassStore.setCurrentPass(passList.get(0));
         }
         return fixedPassListPassStore;
+    }
+
+    @Singleton
+    @Provides
+    Settings provideSettings() {
+        return mock(Settings.class);
+    }
+
+
+    @Singleton
+    @Provides
+    Bus provideBus() {
+        return mock(Bus.class);
     }
 }
