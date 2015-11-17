@@ -19,6 +19,8 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
@@ -32,6 +34,7 @@ import org.ligi.passandroid.events.TypeFocusEvent;
 import org.ligi.passandroid.helper.PassUtil;
 import org.ligi.passandroid.model.FiledPass;
 import org.ligi.passandroid.model.PassStore;
+import org.ligi.passandroid.model.Settings;
 import org.ligi.snackengage.SnackEngage;
 import org.ligi.snackengage.snacks.DefaultRateSnack;
 import org.ligi.tracedroid.TraceDroid;
@@ -48,6 +51,12 @@ public class PassListActivity extends AppCompatActivity {
 
     @Inject
     PassStore passStore;
+
+    @Inject
+    Settings settings;
+
+    @Inject
+    Bus bus;
 
     @Bind(R.id.content_list)
     RecyclerView recyclerView;
@@ -129,7 +138,7 @@ public class PassListActivity extends AppCompatActivity {
             public void run() {
 
                 passStore.refreshPassesList();
-                passStore.sort(App.getSettings().getSortOrder());
+                passStore.sort(settings.getSortOrder());
 
                 AXT.at(emptyView).setVisibility(passStore.passCount() == 0);
 
@@ -172,7 +181,7 @@ public class PassListActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
-                App.getBus().post(new NavigationOpenedEvent());
+                bus.post(new NavigationOpenedEvent());
             }
         };
 
@@ -216,7 +225,7 @@ public class PassListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        App.getBus().register(this);
+        bus.register(this);
         refreshPasses();
     }
 
@@ -241,7 +250,7 @@ public class PassListActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        App.getBus().unregister(this);
+        bus.unregister(this);
         super.onPause();
     }
 
