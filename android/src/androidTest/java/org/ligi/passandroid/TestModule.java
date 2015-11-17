@@ -19,6 +19,7 @@ import dagger.Module;
 import dagger.Provides;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Module
 public class TestModule {
@@ -51,7 +52,9 @@ public class TestModule {
     @Singleton
     @Provides
     Settings provideSettings() {
-        return mock(Settings.class);
+        final Settings mock = mock(Settings.class);
+        when(mock.getSortOrder()).thenReturn(PassStore.SortOrder.DATE);
+        return mock;
     }
 
 
