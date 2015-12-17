@@ -25,11 +25,6 @@ public class FixedPassListPassStore implements PassStore {
     }
 
     @Override
-    public void deleteCache() {
-        // no effect in this impl
-    }
-
-    @Override
     public void deleteCache(String id) {
         // no effect in this impl
     }

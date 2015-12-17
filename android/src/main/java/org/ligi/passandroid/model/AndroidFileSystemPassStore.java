@@ -37,13 +37,6 @@ public class AndroidFileSystemPassStore implements PassStore {
         getCacheFile(id).delete();
     }
 
-    @Override
-    public void deleteCache() {
-        for (String id : getPassIDArray()) {
-            deleteCache(id);
-        }
-    }
-
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void deleteCache(String id) {
         getCacheFile(id).delete();
@@ -126,11 +119,6 @@ public class AndroidFileSystemPassStore implements PassStore {
     @Override
     public int passCount() {
         return passList.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return passList.isEmpty();
     }
 
     @Override
