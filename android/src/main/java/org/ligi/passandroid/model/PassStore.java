@@ -41,8 +41,6 @@ public interface PassStore {
 
     void deleteCacheForId(String id);
 
-    void deleteCache(String id);
-
     void refreshPassesList();
 
     int passCount();

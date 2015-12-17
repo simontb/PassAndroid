@@ -37,11 +37,6 @@ public class AndroidFileSystemPassStore implements PassStore {
         getCacheFile(id).delete();
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void deleteCache(String id) {
-        getCacheFile(id).delete();
-    }
-
     private File getCacheFile(String id) {
         return new File(getPathForID(id) + "/base_cache.obj");
     }
