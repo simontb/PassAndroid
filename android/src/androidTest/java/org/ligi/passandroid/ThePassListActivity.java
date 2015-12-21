@@ -34,7 +34,7 @@ public class ThePassListActivity extends BaseIntegration<PassListActivity> {
     @MediumTest
     public void testListIsThere() {
 
-        onView(withId(R.id.content_list)).check(matches(isDisplayed()));
+        onView(withId(R.id.pass_recyclerview)).check(matches(isDisplayed()));
         Spoon.screenshot(getActivity(), "list");
     }
 

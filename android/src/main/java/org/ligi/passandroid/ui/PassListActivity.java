@@ -8,10 +8,13 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +34,7 @@ import org.ligi.passandroid.events.SortOrderChangeEvent;
 import org.ligi.passandroid.events.TypeFocusEvent;
 import org.ligi.passandroid.helper.PassUtil;
 import org.ligi.passandroid.model.FiledPass;
+import org.ligi.passandroid.model.PassClassifier;
 import org.ligi.snackengage.SnackEngage;
 import org.ligi.snackengage.snacks.DefaultRateSnack;
 import org.ligi.tracedroid.TraceDroid;
@@ -40,15 +44,18 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PassListActivity extends PassAndroidActivity {
+public class PassListActivity extends PassAndroidActivity implements PassClassifier.OnClassificationChangeListener {
 
     private static final int OPEN_FILE_READ_REQUEST_CODE = 1000;
-    private PassAdapter passAdapter;
 
     private ActionBarDrawerToggle drawerToggle;
 
-    @Bind(R.id.content_list)
-    RecyclerView recyclerView;
+    @Bind(R.id.tab_layout)
+    TabLayout tabLayout;
+
+
+    @Bind(R.id.view_pager)
+    ViewPager viewPager;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -58,6 +65,8 @@ public class PassListActivity extends PassAndroidActivity {
 
     @Bind(R.id.fam)
     FloatingActionsMenu floatingActionsMenu;
+
+    private PassTopicFragmentPagerAdapter adapter;
 
     @OnClick(R.id.fab_action_create_pass)
     void onFABClick() {
@@ -86,7 +95,6 @@ public class PassListActivity extends PassAndroidActivity {
 
     @Bind(R.id.fab_action_open_file)
     FloatingActionButton openFileFAB;
-
     public final static int VERSION_STARTING_TO_SUPPORT_STORAGE_FRAMEWORK = 19;
 
     @OnClick(R.id.fab_action_open_file)
@@ -131,11 +139,8 @@ public class PassListActivity extends PassAndroidActivity {
             public void run() {
 
                 passStore.refreshPassesList();
-                passStore.sort(settings.getSortOrder());
 
                 AXT.at(emptyView).setVisibility(passStore.getPassList().isEmpty());
-
-                passAdapter.notifyDataSetChanged();
 
             }
         });
@@ -156,10 +161,6 @@ public class PassListActivity extends PassAndroidActivity {
         ButterKnife.bind(this);
 
         AXT.at(openFileFAB).setVisibility(Build.VERSION.SDK_INT >= VERSION_STARTING_TO_SUPPORT_STORAGE_FRAMEWORK);
-
-        final LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);
 
         // don't want too many windows in worst case - so check for errors first
         if (TraceDroid.getStackTraceFiles().length > 0) {
@@ -185,18 +186,23 @@ public class PassListActivity extends PassAndroidActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        passAdapter = new PassAdapter(this);
-        recyclerView.setAdapter(passAdapter);
+
+        adapter = new PassTopicFragmentPagerAdapter(passStore.getClassifier(), getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+
+        tabLayout.setupWithViewPager(viewPager);
+
     }
 
     private void scrollToType(String type) {
-
+/*
         for (int i = 0; i < passAdapter.getItemCount(); i++) {
             if (passStore.getPassList().get(i).getTypeNotNull().equals(type)) {
                 recyclerView.scrollToPosition(i);
                 return; // we are done
             }
         }
+*/
     }
 
 
@@ -222,6 +228,9 @@ public class PassListActivity extends PassAndroidActivity {
 
         bus.register(this);
         refreshPasses();
+
+        adapter.notifyDataSetChanged();
+        passStore.getClassifier().onClassificationChangeListeners.add(this);
     }
 
     @Override
@@ -245,8 +254,54 @@ public class PassListActivity extends PassAndroidActivity {
 
     @Override
     protected void onPause() {
+        passStore.getClassifier().onClassificationChangeListeners.remove(this);
         bus.unregister(this);
         super.onPause();
     }
 
+    @Override
+    public void OnClassificationChange() {
+        refreshPasses();
+
+        adapter.notifyDataSetChanged();
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private static class PassTopicFragmentPagerAdapter extends FragmentStatePagerAdapter {
+
+        private String[] topic_array;
+        private final PassClassifier passClassifier;
+
+        public PassTopicFragmentPagerAdapter(PassClassifier passClassifier, FragmentManager fragmentManager) {
+            super(fragmentManager);
+            this.passClassifier = passClassifier;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            topic_array = passClassifier.getTopics().toArray(new String[passClassifier.getTopics().size()]);
+            super.notifyDataSetChanged();
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return PassListFragment.newInstance(topic_array[position]);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE; // TODO - return POSITION_UNCHANGED in some cases
+        }
+
+        @Override
+        public int getCount() {
+            return topic_array.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return topic_array[position];
+        }
+    }
 }
