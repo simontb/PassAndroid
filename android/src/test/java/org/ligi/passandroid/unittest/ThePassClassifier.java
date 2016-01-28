@@ -4,11 +4,13 @@ import org.junit.Test;
 import org.ligi.passandroid.model.FiledPass;
 import org.ligi.passandroid.model.PassClassifier;
 import org.ligi.passandroid.model.PassImpl;
+import org.mockito.internal.util.collections.Sets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,16 +22,16 @@ public class ThePassClassifier {
     @Test
     public void testThatPassIsInactiveByDefault() {
 
-        final PassClassifier tested = new PassClassifier(new HashMap<String, List<String>>());
+        final PassClassifier tested = new PassClassifier(new HashMap<String, Set<String>>());
 
         assertThat(tested.isPassOnTopic(getPassWithId(ID_1), PassClassifier.DEFAULT_TOPIC)).isTrue();
     }
 
     @Test
     public void testThatOnlyNonDefaultTopicInTopicListWhenOnePassWithNonDefaultTopic() {
-        final PassClassifier tested = new PassClassifier(new HashMap<String, List<String>>() {
+        final PassClassifier tested = new PassClassifier(new HashMap<String, Set<String>>() {
             {
-                put(TOPIC_1, Arrays.asList(ID_1));
+                put(TOPIC_1, Sets.newSet(ID_1));
             }
         });
 
@@ -38,11 +40,9 @@ public class ThePassClassifier {
 
     @Test
     public void testThatAfterMovingFromOnlyOneTopicToDefaultTopicOnly() {
-        final PassClassifier tested = new PassClassifier(new HashMap<String, List<String>>() {
+        final PassClassifier tested = new PassClassifier(new HashMap<String, Set<String>>() {
             {
-                put(TOPIC_1, new ArrayList<String>() {{
-                    add(ID_1);
-                }});
+                put(TOPIC_1, Sets.newSet(ID_1));
             }
         });
 
@@ -53,11 +53,9 @@ public class ThePassClassifier {
 
     @Test
     public void testThatTopicIsGoneAfterMove() {
-        final PassClassifier tested = new PassClassifier(new HashMap<String, List<String>>() {
+        final PassClassifier tested = new PassClassifier(new HashMap<String, Set<String>>() {
             {
-                put(TOPIC_1, new ArrayList<String>() {{
-                    add(ID_1);
-                }});
+                put(TOPIC_1, Sets.newSet(ID_1));
             }
         });
 
@@ -68,9 +66,9 @@ public class ThePassClassifier {
 
     @Test
     public void testThatPassIsNotActiveWhenInTopic() {
-        final PassClassifier tested = new PassClassifier(new HashMap<String, List<String>>() {
+        final PassClassifier tested = new PassClassifier(new HashMap<String, Set<String>>() {
             {
-                put(TOPIC_1, Arrays.asList(ID_1));
+                put(TOPIC_1, Sets.newSet(ID_1));
             }
         });
 
@@ -80,9 +78,9 @@ public class ThePassClassifier {
 
     @Test
     public void testThatPassIsInTopicAsExpected() {
-        final PassClassifier tested = new PassClassifier(new HashMap<String, List<String>>() {
+        final PassClassifier tested = new PassClassifier(new HashMap<String, Set<String>>() {
             {
-                put(TOPIC_1, Arrays.asList(ID_1));
+                put(TOPIC_1, Sets.newSet(ID_1));
             }
         });
 
@@ -92,7 +90,7 @@ public class ThePassClassifier {
 
     @Test
     public void testHasAtLeastOneTopic() {
-        final PassClassifier tested = new PassClassifier(new HashMap<String, List<String>>());
+        final PassClassifier tested = new PassClassifier(new HashMap<String, Set<String>>());
 
         assertThat(tested.getTopics()).containsExactly(PassClassifier.DEFAULT_TOPIC);
     }

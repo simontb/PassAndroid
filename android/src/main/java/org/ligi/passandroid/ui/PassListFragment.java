@@ -31,7 +31,7 @@ public class PassListFragment extends Fragment implements PassClassifier.OnClass
         PassListFragment myFragment = new PassListFragment();
 
         Bundle args = new Bundle();
-        args.putString(BUNDLE_KEY_TOPIC,topic);
+        args.putString(BUNDLE_KEY_TOPIC, topic);
         myFragment.setArguments(args);
 
         return myFragment;
@@ -69,7 +69,14 @@ public class PassListFragment extends Fragment implements PassClassifier.OnClass
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 final FiledPass pass = passStoreProjection.getPassList().get(viewHolder.getAdapterPosition());
-                passStore.getClassifier().moveToTopic(pass,"TRASH");
+
+                if (passStore.getClassifier().isPassOnTopic(pass, "TRASH")) {
+                    passStore.getClassifier().moveToTopic(pass, PassClassifier.DEFAULT_TOPIC);
+                } else {
+                    passStore.getClassifier().moveToTopic(pass, "TRASH");
+                }
+
+
                 //Remove swiped item from list and notify the RecyclerView
                 /*final Pass passbookAt = passStoreProjection.getPassList().get(viewHolder.getAdapterPosition());
                 passStore.deletePassWithId(passbookAt.getId());

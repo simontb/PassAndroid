@@ -7,6 +7,7 @@ import org.ligi.passandroid.model.PassStore;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class FixedPassListPassStore implements PassStore {
 
@@ -59,7 +60,7 @@ public class FixedPassListPassStore implements PassStore {
 
     @Override
     public PassClassifier getClassifier() {
-        return new PassClassifier(new HashMap<String, List<String>>());
+        return new PassClassifier(new HashMap<String, Set<String>>());
     }
 
     @Override
