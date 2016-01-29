@@ -18,12 +18,10 @@ public class PassClassifier {
     public final static String DEFAULT_TOPIC = "active";
 
     private final HashMap<String, Set<String>> pass_id_list_by_topic;
-    private final HashMap<String, String> topic_by_id;
+    private final HashMap<String, String> topic_by_id = new HashMap<>();
 
     public PassClassifier(HashMap<String, Set<String>> pass_id_list_by_topic) {
         this.pass_id_list_by_topic = pass_id_list_by_topic;
-
-        topic_by_id = new HashMap<>();
 
         processDataChange();
     }
@@ -114,7 +112,14 @@ public class PassClassifier {
 
         if (topic.equals(DEFAULT_TOPIC)) {
             topic_by_id.put(pass.getId(), DEFAULT_TOPIC);
-            pass_id_list_by_topic.get(DEFAULT_TOPIC).add(pass.getId());
+            if (pass_id_list_by_topic.get(DEFAULT_TOPIC) == null) {
+                pass_id_list_by_topic.put(DEFAULT_TOPIC, new HashSet<String>());
+            }
+            final String id = pass.getId();
+            final Set<String> strings = pass_id_list_by_topic.get(DEFAULT_TOPIC);
+            if (id!=null) {
+                strings.add(id);
+            }
             return true;
         }
 
