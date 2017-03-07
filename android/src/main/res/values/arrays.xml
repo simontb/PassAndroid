@@ -5,6 +5,7 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="nightmode_keys" >
@@ -18,6 +19,7 @@
         <item>@string/sort_order_date_desc</item>
         <item>@string/sort_order_date_type</item>
         <item>@string/sort_order_date_temporaldistance</item>
+        <item>@string/sort_order_date_upcomingfirst</item>
     </string-array>
 
     <string-array name="night_modes">

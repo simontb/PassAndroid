@@ -148,6 +148,7 @@ Es wäre toll zu erfahren, wie ihr die Anwendung benutzt, was ihr toll oder was 
   <string name="sort_order_date_desc">Datum, absteigend</string>
   <string name="sort_order_date_type">Typ</string>
   <string name="sort_order_date_temporaldistance">Zeitlicher Abstand</string>
+  <string name="sort_order_date_upcomingfirst">Zukünftige zuerst</string>
   <string-array name="category_edit_options">
     <item>@string/select_category_dialog_title</item>
     <item>@string/change_color_dialog_title</item>

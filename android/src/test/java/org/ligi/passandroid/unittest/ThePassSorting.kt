@@ -64,4 +64,11 @@ class ThePassSorting {
         assertThat(passList).containsExactly(pass3, pass1, pass4, pass5, pass2)
     }
 
+    @Test
+    fun testUpcomingFirst() {
+        Collections.sort(passList, PassSortOrder.UPCOMING_FIRST.toComparator())
+
+        assertThat(passList).containsExactly(pass3, pass2, pass5, pass4, pass1)
+    }
+
 }

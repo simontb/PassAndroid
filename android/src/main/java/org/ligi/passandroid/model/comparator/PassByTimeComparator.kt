@@ -29,7 +29,7 @@ open class PassByTimeComparator : Comparator<Pass> {
         return foo(leftDate, rightDate)
     }
 
-    private fun extractPassDate(pass: Pass): ZonedDateTime? {
+    protected fun extractPassDate(pass: Pass): ZonedDateTime? {
         if (pass.calendarTimespan != null && pass.calendarTimespan!!.from != null) {
             return pass.calendarTimespan!!.from
         }
