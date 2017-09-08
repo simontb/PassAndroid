@@ -99,6 +99,17 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
         }
+        debug {
+            if (project.hasProperty('debugSeparateAppId')) {
+                applicationIdSuffix ".debug"
+                versionNameSuffix "-debug"
+                resValue "string", "debug_app_name", "PassAndroid DEBUG"
+                resValue "string", "debug_authority_fileprovider", "org.ligi.passandroid.debug.fileprovider"
+            } else {
+                resValue "string", "debug_app_name", "PassAndroid"
+                resValue "string", "debug_authority_fileprovider", "org.ligi.passandroid.fileprovider"
+            }
+        }
     }
 }
 
