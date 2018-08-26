@@ -225,6 +225,8 @@ class PassListActivity : PassAndroidActivity() {
             }.setNegativeButton(android.R.string.cancel, null).show()
             true
         }
+        
+        R.id.menu_delete_expired -> true
 
         else -> drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
     }
@@ -239,7 +241,9 @@ class PassListActivity : PassAndroidActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_emptytrash).isVisible = adapter.count > 0 && adapter.getPageTitle(view_pager.currentItem) == getString(R.string.topic_trash)
+        val currentTopicIsTrash = adapter.count > 0 && adapter.getPageTitle(view_pager.currentItem) == getString(R.string.topic_trash)
+        menu.findItem(R.id.menu_emptytrash).isVisible = currentTopicIsTrash
+        menu.findItem(R.id.menu_delete_expired).isVisible = adapter.count > 0 && !currentTopicIsTrash
         return true
     }
 

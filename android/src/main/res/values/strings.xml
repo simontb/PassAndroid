@@ -122,6 +122,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWIS
     <string name="scan_progressdialog_title">Searching ...</string>
     <string name="scan_progressdialog_message">Please wait.</string>
     <string name="scan_dialog_send_background_button">background</string>
+    <string name="delete_expired_label">delete expired</string>
     <string name="emtytrash_label">empty trash</string>
     <string name="barcode_edit_hint_alternative_message">alternative Message</string>
     <string name="barcode_edit_random">random</string>

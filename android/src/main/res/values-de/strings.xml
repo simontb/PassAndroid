@@ -180,4 +180,5 @@ Es wäre toll zu erfahren, wie ihr die Anwendung benutzt, was ihr toll oder was 
   <string name="nav_community_on_google">Community auf Google+</string>
   <string name="nav_improve_translation">Verbessere die Übersetzung</string>
   <string name="launcher_shortcut">Launcher-Verknüpfung</string>
+    <string name="delete_expired_label">Abgelaufene Löschen</string>
 </resources>

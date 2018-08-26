@@ -2,6 +2,12 @@
       xmlns:yourapp="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_delete_expired"
+        yourapp:showAsAction="ifRoom"
+        android:title="@string/delete_expired_label"
+        android:icon="@drawable/ic_action_delete_sweep"/>
+
+    <item
             android:id="@+id/menu_emptytrash"
             yourapp:showAsAction="ifRoom"
             android:title="@string/emtytrash_label"
