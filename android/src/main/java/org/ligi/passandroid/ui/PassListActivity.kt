@@ -225,8 +225,11 @@ class PassListActivity : PassAndroidActivity() {
             }.setNegativeButton(android.R.string.cancel, null).show()
             true
         }
-        
-        R.id.menu_delete_expired -> true
+
+        R.id.menu_delete_expired -> {
+            passStore
+            true
+        }
 
         else -> drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
     }
